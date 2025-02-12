@@ -1,6 +1,7 @@
 import graphene
 from graphene_django.types import DjangoObjectType
 from .models import Client, Project, Employee, EmployeeProjectAssignment
+from graphene_file_upload.scalars import Upload
 
 # Define Client Type
 class ClientType(DjangoObjectType):
@@ -107,14 +108,15 @@ class CreateProject(graphene.Mutation):
         client_id = graphene.Int(required=True)
         price_type = graphene.String(required=True)
         price = graphene.Float(required=True)
+        file = Upload(required=True)
         delivery_date = graphene.Date(required=True)
         status = graphene.String()
 
     project = graphene.Field(ProjectType)
 
-    def mutate(self, info, name, client_id, price_type, price, delivery_date, status="pending"):
+    def mutate(self, info, name, client_id, price_type, price, file, delivery_date, status="pending"):
         client = Client.objects.get(pk=client_id)
-        project = Project(name=name, client=client, price_type=price_type, price=price, delivery_date=delivery_date, status=status)
+        project = Project(name=name, client=client, price_type=price_type, price=price, file=file, delivery_date=delivery_date, status=status)
         project.save()
         return CreateProject(project=project)
     

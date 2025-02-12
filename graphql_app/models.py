@@ -25,6 +25,7 @@ class Project(models.Model):
     client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name="projects")
     price_type = models.CharField(max_length=15, choices=PRICE_TYPE_CHOICES)
     price = models.FloatField(max_length=10)
+    document = models.FileField(upload_to="project_documents/", null=True, blank=True)
     received_date = models.DateField(auto_now_add=True)
     delivery_date = models.DateField()
     status = models.CharField(
