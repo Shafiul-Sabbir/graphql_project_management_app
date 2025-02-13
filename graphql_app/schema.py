@@ -108,15 +108,15 @@ class CreateProject(graphene.Mutation):
         client_id = graphene.Int(required=True)
         price_type = graphene.String(required=True)
         price = graphene.Float(required=True)
-        file = Upload(required=True)
+        document = Upload(required=True)
         delivery_date = graphene.Date(required=True)
         status = graphene.String()
 
     project = graphene.Field(ProjectType)
 
-    def mutate(self, info, name, client_id, price_type, price, file, delivery_date, status="pending"):
+    def mutate(self, info, name, client_id, price_type, price, document, delivery_date, status="pending"):
         client = Client.objects.get(pk=client_id)
-        project = Project(name=name, client=client, price_type=price_type, price=price, file=file, delivery_date=delivery_date, status=status)
+        project = Project(name=name, client=client, price_type=price_type, price=price, document=document, delivery_date=delivery_date, status=status)
         project.save()
         return CreateProject(project=project)
     

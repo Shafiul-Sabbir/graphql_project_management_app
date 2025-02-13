@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     
     # Third party apps
     'graphene_django',
+    'graphene_file_upload.django',
     
     # Local apps
     'graphql_app',
@@ -49,7 +50,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -109,6 +110,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:8000",  # For local testing
+]
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/

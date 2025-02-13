@@ -1,0 +1,146 @@
+type Query {
+  allClients: [ClientType]
+  allProjects: [ProjectType]
+  allEmployees: [EmployeeType]
+  allEmployeeProjectAssignments: [EmployeeProjectAssignmentType]
+  employeeDetail(id: ID): EmployeeType
+}
+
+type ClientType {
+  id: ID!
+  name: String!
+  contactNumber: String!
+  email: String!
+  projects: [ProjectType!]!
+}
+
+type ProjectType {
+  id: ID!
+  name: String!
+  client: ClientType!
+  priceType: GraphqlAppProjectPriceTypeChoices!
+  price: Float!
+  document: String
+  receivedDate: Date!
+  deliveryDate: Date!
+  status: GraphqlAppProjectStatusChoices!
+  employeeSet: [EmployeeType!]!
+  employeeAssignments: [EmployeeProjectAssignmentType!]!
+}
+
+"""An enumeration."""
+enum GraphqlAppProjectPriceTypeChoices {
+  """Fixed Price"""
+  FIXED
+
+  """Hourly Rate"""
+  HOURLY
+
+  """Monthly Rate"""
+  MONTHLY
+}
+
+"""
+The `Date` scalar type represents a Date
+value as specified by
+[iso8601](https://en.wikipedia.org/wiki/ISO_8601).
+"""
+scalar Date
+
+"""An enumeration."""
+enum GraphqlAppProjectStatusChoices {
+  """Pending"""
+  PENDING
+
+  """In Progress"""
+  IN_PROGRESS
+
+  """Completed"""
+  COMPLETED
+}
+
+type EmployeeType {
+  id: ID!
+  name: String!
+  contactNumber: String!
+  email: String!
+  assignedProjects: [ProjectType]
+  projectAssignments: [EmployeeProjectAssignmentType!]!
+}
+
+type EmployeeProjectAssignmentType {
+  id: ID!
+  employee: EmployeeType!
+  project: ProjectType!
+  startDate: Date!
+  endDate: Date!
+}
+
+type Mutation {
+  createClient(contactNumber: String!, email: String!, name: String!): CreateClient
+  updateClient(contactNumber: String, email: String, id: Int!, name: String): UpdateClient
+  deleteClient(id: Int!): DeleteClient
+  createProject(clientId: Int!, deliveryDate: Date!, document: Upload!, name: String!, price: Float!, priceType: String!, status: String): CreateProject
+  updateProject(clientId: Int, deliveryDate: Date, id: Int!, name: String, price: Float, priceType: String, status: String): UpdateProject
+  deleteProject(id: Int!): DeleteProject
+  createEmployee(contactNumber: String!, email: String!, name: String!): CreateEmployee
+  updateEmployee(contactNumber: String, email: String, id: Int!, name: String): UpdateEmployee
+  deleteEmployee(id: Int!): DeleteEmployee
+  createAssignEmployeeToProject(employeeId: Int!, endDate: Date!, projectId: Int!, startDate: Date!): CreateAssignEmployeeToProject
+  updateAssignEmployeeToProject(employeeId: Int, endDate: Date, id: Int!, projectId: Int, startDate: Date): UpdateAssignEmployeeToProject
+  deleteAssignEmployeeToProject(id: Int!): DeleteAssignEmployeeToProject
+}
+
+type CreateClient {
+  client: ClientType
+}
+
+type UpdateClient {
+  client: ClientType
+}
+
+type DeleteClient {
+  success: Boolean
+}
+
+type CreateProject {
+  project: ProjectType
+}
+
+"""
+Create scalar that ignores normal serialization/deserialization, since
+that will be handled by the multipart request spec
+"""
+scalar Upload
+
+type UpdateProject {
+  project: ProjectType
+}
+
+type DeleteProject {
+  success: Boolean
+}
+
+type CreateEmployee {
+  employee: EmployeeType
+}
+
+type UpdateEmployee {
+  employee: EmployeeType
+}
+
+type DeleteEmployee {
+  success: Boolean
+}
+
+type CreateAssignEmployeeToProject {
+  employeeProjectAssignment: EmployeeProjectAssignmentType
+}
+
+type UpdateAssignEmployeeToProject {
+  employeeProjectAssignment: EmployeeProjectAssignmentType
+}
+
+type DeleteAssignEmployeeToProject {
+  success: Boolean
+}
